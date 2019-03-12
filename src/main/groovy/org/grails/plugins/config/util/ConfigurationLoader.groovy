@@ -54,15 +54,8 @@ class ConfigurationLoader {
 
         def envName = grails.util.Environment.current.name
         log.info("envName='${envName}'")
-        def appConf = new ConfigSlurper(envName).parse(appGroovy)
-        def confLocs = appConf.grails?.config?.locations
-        if (!confLocs) {
-            def runGroovy = loader.getResource(RUNTIME_GROOVY)
-            if (runGroovy) {
-                def runConf = new ConfigSlurper(envName).parse(runGroovy)
-                confLocs = runConf.grails?.config?.locations
-            }
-        }
+
+        def confLocs = _env.getProperty("grails.config.locations", List)
         if (!confLocs) {
             log.info("Not present: grails.config.locations")
             return
